@@ -24,6 +24,9 @@ from samplers import RASampler
 import models
 import utils
 
+import model.convnext
+import model.convnext_isotropic
+
 
 def get_args_parser():
     parser = argparse.ArgumentParser('DeiT training and evaluation script', add_help=False)
@@ -125,23 +128,27 @@ def get_args_parser():
                         help='How to apply mixup/cutmix params. Per "batch", "pair", or "elem"')
 
     # Distillation parameters
-    parser.add_argument('--teacher-model', default='regnety_160', type=str, metavar='MODEL',
+    parser.add_argument('--teacher-model', default='convnext_base', type=str, metavar='MODEL',
                         help='Name of teacher model to train (default: "regnety_160"')
-    parser.add_argument('--teacher-path', type=str, default='')
-    parser.add_argument('--distillation-type', default='none', choices=['none', 'soft', 'hard'], type=str, help="")
+    parser.add_argument('--teacher-path', type=str,
+                        default='/home/uzair.khattak/CV703/assignment1/next/outputs_convnext_cub+food/checkpoint-best.pth')
+    parser.add_argument('--distillation-type', default='hard', choices=['none', 'soft', 'hard'], type=str, help="")
     parser.add_argument('--distillation-alpha', default=0.5, type=float, help="")
     parser.add_argument('--distillation-tau', default=1.0, type=float, help="")
 
     # * Finetuning params
-    parser.add_argument('--finetune', default='/home/uzair.khattak/CV703/assignment1/diet/deit_384_weights.pth', help='finetune from checkpoint')
+    parser.add_argument('--finetune', default='/home/uzair.khattak/CV703/assignment1/diet/deit_distilled_384.pth',
+                        help='finetune from checkpoint')
 
     # Dataset parameters
-    parser.add_argument('--data-path', default='/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/',
+    parser.add_argument('--data-path',
+                        default='/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/',
                         choices=['/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/',
                                  '/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/',
-                                 '/l/users/u21010225/AssignmentNo1/FoodX/food_dataset'],  type=str,
+                                 '/l/users/u21010225/AssignmentNo1/FoodX/food_dataset'], type=str,
                         help='dataset path')
-    parser.add_argument('--data-set', default='CUB_DOG', choices=['CUB', 'FOOD', 'CUB_DOG', 'CIFAR', 'IMNET', 'INAT', 'INAT19'],
+    parser.add_argument('--data-set', default='CUB_DOG',
+                        choices=['CUB', 'FOOD', 'CUB_DOG', 'CIFAR', 'IMNET', 'INAT', 'INAT19'],
                         type=str, help='Image Net dataset path')
     parser.add_argument('--inat-category', default='name',
                         choices=['kingdom', 'phylum', 'class', 'order', 'supercategory', 'family', 'genus', 'name'],
@@ -176,8 +183,8 @@ def main(args):
 
     print(args)
 
-    if args.distillation_type != 'none' and args.finetune and not args.eval:
-        raise NotImplementedError("Finetuning with distillation not yet supported")
+    # if args.distillation_type != 'none' and args.finetune and not args.eval:
+    #     raise NotImplementedError("Finetuning with distillation not yet supported")
 
     device = torch.device(args.device)
 
@@ -322,14 +329,22 @@ def main(args):
         criterion = torch.nn.CrossEntropyLoss()
 
     teacher_model = None
+    # if args.distillation_type != 'none':
+    #     assert args.teacher_path, 'need to specify teacher-path when using distillation'
+    #     print(f"Creating teacher model: {args.teacher_model}")
+    #     teacher_model = create_model(
+    #         args.teacher_model,
+    #         pretrained=False,
+    #         num_classes=args.nb_classes,
+    #         global_pool='avg',
+    #     )
     if args.distillation_type != 'none':
         assert args.teacher_path, 'need to specify teacher-path when using distillation'
         print(f"Creating teacher model: {args.teacher_model}")
         teacher_model = create_model(
             args.teacher_model,
             pretrained=False,
-            num_classes=args.nb_classes,
-            global_pool='avg',
+            num_classes=args.nb_classes
         )
         if args.teacher_path.startswith('https'):
             checkpoint = torch.hub.load_state_dict_from_url(
@@ -379,7 +394,7 @@ def main(args):
             model, criterion, data_loader_train,
             optimizer, device, epoch, loss_scaler,
             args.clip_grad, model_ema, mixup_fn,
-            set_training_mode=args.finetune == ''  # keep in eval mode during finetuning
+            set_training_mode=True
         )
 
         lr_scheduler.step(epoch)
@@ -395,11 +410,10 @@ def main(args):
                     'scaler': loss_scaler.state_dict(),
                     'args': args,
                 }, checkpoint_path)
-             
 
         test_stats = evaluate(data_loader_val, model, device)
         print(f"Accuracy of the network on the {len(dataset_val)} test images: {test_stats['acc1']:.1f}%")
-        
+
         if max_accuracy < test_stats["acc1"]:
             max_accuracy = test_stats["acc1"]
             if args.output_dir:
@@ -414,17 +428,14 @@ def main(args):
                         'scaler': loss_scaler.state_dict(),
                         'args': args,
                     }, checkpoint_path)
-            
+
         print(f'Max accuracy: {max_accuracy:.2f}%')
 
         log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                      **{f'test_{k}': v for k, v in test_stats.items()},
                      'epoch': epoch,
                      'n_parameters': n_parameters}
-        
-        
-        
-        
+
         if args.output_dir and utils.is_main_process():
             with (output_dir / "log.txt").open("a") as f:
                 f.write(json.dumps(log_stats) + "\n")
