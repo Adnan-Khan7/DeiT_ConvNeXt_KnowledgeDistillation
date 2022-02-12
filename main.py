@@ -132,13 +132,14 @@ def get_args_parser():
                         help='Name of teacher model to train (default: "regnety_160"')
     parser.add_argument('--teacher-path', type=str,
                         default='/home/uzair.khattak/CV703/assignment1/next/outputs_convnext_cub+food/checkpoint-best.pth')
-    parser.add_argument('--distillation-type', default='hard', choices=['none', 'soft', 'hard'], type=str, help="")
+    parser.add_argument('--distillation-type', default='none', choices=['none', 'soft', 'hard'], type=str, help="")
     parser.add_argument('--distillation-alpha', default=0.5, type=float, help="")
     parser.add_argument('--distillation-tau', default=1.0, type=float, help="")
 
     # * Finetuning params
-    parser.add_argument('--finetune', default='/home/uzair.khattak/CV703/assignment1/diet/deit_distilled_384.pth',
-                        help='finetune from checkpoint')
+    parser.add_argument('--finetune', default='',
+                        help='finetune from checkpoint',
+                        choices = ['/home/uzair.khattak/CV703/assignment1/diet/deit_distilled_384.pth','/home/uzair.khattak/CV703/assignment1/diet/khaled_deit_distilled_384.pth'])
 
     # Dataset parameters
     parser.add_argument('--data-path',
@@ -262,6 +263,7 @@ def main(args):
             checkpoint = torch.hub.load_state_dict_from_url(
                 args.finetune, map_location='cpu', check_hash=True)
         else:
+            print("loading pretrained weights from: ",args.finetune)
             checkpoint = torch.load(args.finetune, map_location='cpu')
 
         checkpoint_model = checkpoint['model']
