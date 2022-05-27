@@ -1,4 +1,6 @@
-# DeiT: Data-efficient Image Transformers
+# Learning with Knowledge Distillation for Fine Grained Image Classification
+TO BE UPDATED
+
 
 This repository contains PyTorch evaluation code, training code and pretrained models for the following projects:
 * DeiT (Data-Efficient Image Transformers), ICML 2021 
