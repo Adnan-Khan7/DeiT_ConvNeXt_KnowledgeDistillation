@@ -15,7 +15,7 @@ This repository contains the PyTorch based training and evaluation codes for rep
     </li>
   </ul>
 
-<b> Note: For part 1, refer to [our this repo](https://github.com/MUKhattak/ConvNext_FGVC).
+<b> Note </b>: For part 1, refer to [our this repo](https://github.com/MUKhattak/ConvNext_FGVC).
 
 ## Technical Report 
 Complete technical report can be viewed [here](https://github.com/MUKhattak/DeiT_ConvNeXt_KnowledgeDistillation/blob/deit_convnext/FGVC_report.pdf).
