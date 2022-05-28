@@ -5,7 +5,7 @@ Fine-grained Image Classification (FGIC) is one of the challenging tasks in Comp
 This repository contains the PyTorch based training and evaluation codes for reproducing main results of our project. Specifically, we provide instructions on:
 <ol>
   <li>
-    Creating a teacher model by finetuning a (ImageNet1k) pretrained ConvNeXt model on a fine-grained image classification dataset (refer to [our this repo](https://github.com/MUKhattak/ConvNext_FGVC) for this part). 
+    Creating a teacher model by finetuning a (ImageNet1k) pretrained ConvNeXt model on a fine-grained image classification dataset. 
   </li>
     <li>
     Creating a student model by finetuning (ImageNet1k) pretrained DeiT (Data-efficient image Transformer) model on a fine-grained image classification dataset. 
@@ -14,6 +14,8 @@ This repository contains the PyTorch based training and evaluation codes for rep
     Using Knowledge Distillation to further push forward the performance of DeiT student model by distilling knowledge from ConvNext teacher model for fine-grained image classification.
     </li>
   </ul>
+
+<b> Note: For part 1, refer to [our this repo](https://github.com/MUKhattak/ConvNext_FGVC).
 
 ## Technical Report 
 Complete technical report can be viewed [here](https://github.com/MUKhattak/DeiT_ConvNeXt_KnowledgeDistillation/blob/deit_convnext/FGVC_report.pdf).
