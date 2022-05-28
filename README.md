@@ -13,7 +13,7 @@ This repository contains the PyTorch based training and evaluation codes for rep
     <li>
     Using Knowledge Distillation to further push forward the performance of DeiT student model by distilling knowledge from ConvNext teacher model for fine-grained image classification.
     </li>
-  </ul>
+  </ol>
 
 <b> Note </b>: For part 1, refer to [our this repo](https://github.com/MUKhattak/ConvNext_FGVC).
 
