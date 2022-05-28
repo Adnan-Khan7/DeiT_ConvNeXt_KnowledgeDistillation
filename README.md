@@ -40,6 +40,7 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. Follow the instruc
 We provide support for 3 FGVC datasets for our experiments on KD distillation with DeiT and ConvNeXt.
 
 <b> CUB Dataset </b>
+
 Download CUB dataset from [here](https://drive.google.com/file/d/1hbzc_P1FuxMkcabkgn9ZKinBwW683j45/view). Extract the file. Our code expects the dataset folder to have the following structure:
 
 ```
@@ -50,6 +51,7 @@ CUB_dataset_root_folder/
     └─ ....
 ```
 <b> FoodX Dataset </b>
+
 Download FoodX dataset from [here](https://github.com/karansikka1/iFood_2019). After extracting the files, the root folder should have following structure:
 
 ```
@@ -67,6 +69,7 @@ FoodX_dataset_root_folder/
 ```
 
 <b> Stanford Dogs Dataset </b>
+
 Download the dataset from [here](http://vision.stanford.edu/aditya86/ImageNetDogs/). The root folder should have following structure:
 
 ```
