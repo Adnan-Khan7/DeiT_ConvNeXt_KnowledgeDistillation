@@ -105,9 +105,19 @@ To further finetune DeiT Distilled 384 model (already finetuned on CUB dataset) 
 ```
 
 <b> Note </b>: We also provide a custom dataset containing categories from both CUB and Dogs datasets, giving a new dataset with total 320 classes. For CUB + DOG dataset, please provide both paths in the --data-set parameter, seperated by a space.
-For example: /l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/
+
+For example: ```/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/```
 
 
 You can use similar python scripts as above to perform experiments on the FoodX and CUB+Dogs dataset.
 
- 
+To evaluate a DeiT Distilled 384 model on CUB dataset, run the following command 
+
+  ```bash
+ $ python main.py --eval --model deit_base_distilled_patch16_384 --input-size 384 --batch-size 16 --data-set CUB --data-path /path/to/dataset/root/folder --resume /path/to/final/pretrained/model
+```
+
+--- 
+Acknowledgement:
+This code repo is forked and modified from official [DeiT repository](https://github.com/facebookresearch/deit)
+
