@@ -31,7 +31,57 @@ We have tested this code on Ubuntu 20.04 LTS with Python 3.8. Follow the instruc
  
   Now clone this repository:
   ```shell
- git clone [https://github.com/MUKhattak/OD-Satellite-iSAID.git](https://github.com/MUKhattak/DeiT_ConvNeXt_KnowledgeDistillation.git)
+ git clone https://github.com/MUKhattak/DeiT_ConvNeXt_KnowledgeDistillation.git
  cd DeiT_ConvNeXt_KnowledgeDistillation/
+```
+ 
+ 
+ ## Datasets
+We provide support for 3 FGVC datasets for our experiments on KD distillation with DeiT and ConvNeXt.
+
+<b> CUB Dataset </b>
+Download CUB dataset from [here](https://drive.google.com/file/d/1hbzc_P1FuxMkcabkgn9ZKinBwW683j45/view). Extract the file. Our code expects the dataset folder to have the following structure:
+
+```
+CUB_dataset_root_folder/
+    └─ images
+    └─ image_class_labels.txt
+    └─ train_test_split.txt
+    └─ ....
+```
+<b> FoodX Dataset </b>
+Download FoodX dataset from [here](https://github.com/karansikka1/iFood_2019). After extracting the files, the root folder should have following structure:
+
+```
+FoodX_dataset_root_folder/
+    └─ annot
+        ├─ class_list.txt
+        ├─ train_info.csv
+        ├─ val_info.csv
+    └─ train_set
+        ├─ train_039992.jpg
+        ├─ ....
+    └─ val_set
+        ├─ val_005206.jpg
+        ├─ ....
+```
+
+<b> Stanford Dogs Dataset </b>
+Download the dataset from [here](http://vision.stanford.edu/aditya86/ImageNetDogs/). The root folder should have following structure:
+
+```
+dog_dataset_root_folder/
+    └─ Images
+        ├─ n02092339-Weimaraner
+            ├─ n02092339_107.jpg
+            ├─ ....
+        ├─ n02101388-Brittany_spaniel
+            ├─ ....
+        ├─ ....
+    └─ splits
+        ├─ file_list.mat
+        ├─ test_list.mat
+        ├─ train_list.mat
+
 ```
  
