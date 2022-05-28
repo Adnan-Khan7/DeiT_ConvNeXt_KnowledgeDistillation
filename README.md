@@ -92,5 +92,22 @@ dog_dataset_root_folder/
 
 ## Training and Evaluation 
 
+To finetune DeiT Distilled 384 model on CUB dataset, run the following command 
+
+  ```bash
+ $ python main.py --model deit_base_distilled_patch16_384 --drop-path 0.8 --input-size 384 --batch-size 16 --lr 5e-5 --warmup-epochs 0 --epochs 60 --weight-decay 1e-8 --cutmix 0 --mixup 0 --data-set CUB --data-path /path/to/dataset/root/folder --output_dir ./output/path --finetune /path/to/imagenet1k/pretrained/deit/weights.pth/
+```
+
+To further finetune DeiT Distilled 384 model (already finetuned on CUB dataset) using Knowledge Distillation from ConvNext teacher model, run the following commad:
+
+  ```bash
+ $ python main.py --model deit_base_distilled_patch16_384 --drop-path 0.8 --input-size 384 --batch-size 16 --lr 5e-5 --warmup-epochs 0 --epochs 60 --weight-decay 1e-8 --cutmix 0 --mixup 0 --data-set CUB --data-path /path/to/dataset/root/folder --output_dir ./output/path --finetune /path/to/imagenet1k/pretrained/deit/weights.pth/
+```
+
+  ```bash
+ $ python main.py -
+--model deit_base_distilled_patch16_384 --distillation-type hard --teacher-model convnext_base --drop-path 0.8 --input-size 384 --batch-size 16 --lr 5e-5 --warmup-epochs 0 --epochs 60 --weight-decay 1e-8 --cutmix 0 --mixup 0 --data-set CUB --data-path /path/to/dataset/root/folder --output_dir /path/to/save/output/files --finetune /path/of/deit/CUB_finetuned/weights 
+```
+
 
  
