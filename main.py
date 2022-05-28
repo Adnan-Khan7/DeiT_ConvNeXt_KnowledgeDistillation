@@ -21,13 +21,7 @@ from datasets import build_dataset
 from engine import train_one_epoch, evaluate
 from losses import DistillationLoss
 from samplers import RASampler
-import models
 import utils
-
-import model.convnext
-import model.convnext_isotropic
-
-
 def get_args_parser():
     parser = argparse.ArgumentParser('DeiT training and evaluation script', add_help=False)
     parser.add_argument('--batch-size', default=64, type=int)
@@ -138,15 +132,11 @@ def get_args_parser():
 
     # * Finetuning params
     parser.add_argument('--finetune', default='',
-                        help='finetune from checkpoint',
-                        choices = ['/home/uzair.khattak/CV703/assignment1/diet/deit_distilled_384.pth','/home/uzair.khattak/CV703/assignment1/diet/khaled_deit_distilled_384.pth'])
+                        help='finetune from checkpoint')
 
     # Dataset parameters
     parser.add_argument('--data-path',
-                        default='/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/',
-                        choices=['/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/',
-                                 '/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/',
-                                 '/l/users/u21010225/AssignmentNo1/FoodX/food_dataset'], type=str,
+                        default='/l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/', type=str,
                         help='dataset path')
     parser.add_argument('--data-set', default='CUB_DOG',
                         choices=['CUB', 'FOOD', 'CUB_DOG', 'CIFAR', 'IMNET', 'INAT', 'INAT19'],
@@ -184,16 +174,12 @@ def main(args):
 
     print(args)
 
-    # if args.distillation_type != 'none' and args.finetune and not args.eval:
-    #     raise NotImplementedError("Finetuning with distillation not yet supported")
-
     device = torch.device(args.device)
 
     # fix the seed for reproducibility
     seed = args.seed + utils.get_rank()
     torch.manual_seed(seed)
     np.random.seed(seed)
-    # random.seed(seed)
 
     cudnn.benchmark = True
 
@@ -331,15 +317,6 @@ def main(args):
         criterion = torch.nn.CrossEntropyLoss()
 
     teacher_model = None
-    # if args.distillation_type != 'none':
-    #     assert args.teacher_path, 'need to specify teacher-path when using distillation'
-    #     print(f"Creating teacher model: {args.teacher_model}")
-    #     teacher_model = create_model(
-    #         args.teacher_model,
-    #         pretrained=False,
-    #         num_classes=args.nb_classes,
-    #         global_pool='avg',
-    #     )
     if args.distillation_type != 'none':
         assert args.teacher_path, 'need to specify teacher-path when using distillation'
         print(f"Creating teacher model: {args.teacher_model}")
