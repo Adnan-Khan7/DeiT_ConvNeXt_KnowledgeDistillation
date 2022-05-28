@@ -101,13 +101,14 @@ To finetune DeiT Distilled 384 model on CUB dataset, run the following command
 To further finetune DeiT Distilled 384 model (already finetuned on CUB dataset) using Knowledge Distillation from ConvNext teacher model, run the following commad:
 
   ```bash
- $ python main.py --model deit_base_distilled_patch16_384 --drop-path 0.8 --input-size 384 --batch-size 16 --lr 5e-5 --warmup-epochs 0 --epochs 60 --weight-decay 1e-8 --cutmix 0 --mixup 0 --data-set CUB --data-path /path/to/dataset/root/folder --output_dir ./output/path --finetune /path/to/imagenet1k/pretrained/deit/weights.pth/
-```
-
-  ```bash
  $ python main.py -
 --model deit_base_distilled_patch16_384 --distillation-type hard --teacher-model convnext_base --drop-path 0.8 --input-size 384 --batch-size 16 --lr 5e-5 --warmup-epochs 0 --epochs 60 --weight-decay 1e-8 --cutmix 0 --mixup 0 --data-set CUB --data-path /path/to/dataset/root/folder --output_dir /path/to/save/output/files --finetune /path/of/deit/CUB_finetuned/weights 
 ```
 
+<b> Note </b>: We also provide a custom dataset containing categories from both CUB and Dogs datasets, giving a new dataset with total 320 classes. For CUB + DOG dataset, please provide both paths in the --data-set parameter, seperated by a space.
+For example: /l/users/u21010225/AssignmentNo1/CUB/CUB_200_2011/ /l/users/u21010225/AssignmentNo1/dog/
+
+
+You can use similar python scripts as above to perform experiments on the FoodX and CUB+Dogs dataset.
 
  
